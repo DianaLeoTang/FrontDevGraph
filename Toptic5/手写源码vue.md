@@ -8,7 +8,7 @@
 # 手写源码系列——Vue1.x
 
 ## 零、写在前面
-之前的GitHub账号出了一些问题，导致对应的手写源码内容就丢了，好在本地还有，就迁移到这里，也相当于在此回顾Vue的发展历程了。我们会从Vue1写起，vue迭代的过程，其实也是在修复框架自身的问题和发展自己的生态。Vue1 的核心原理是Object.defineProperty()和发布订阅模式。Vue2和Vue1的根本区别是虚拟DOM的引入，即VNode和Patch算法，也就是V DOM和Diff算法，还有模版编译器。这些共同构成了Vue的数据响应式。但显然的，Object.defineProperty 本身的局限性一直存在，无法直接监听数组，无法监听新增和删除的属性，为了解决这个问题，Vue3里面进行了断崖式版本更新，启用 Proxy。
+之前的GitHub账号出了一些问题，导致对应的手写源码内容就丢了，好在本地还有，就迁移到这里，也相当于在此回顾Vue的发展历程了。我们会从Vue1写起，vue迭代的过程，其实也是在修复框架自身的问题和发展自己的生态。Vue1 的核心原理是Object.defineProperty()和发布订阅模式。Vue2和Vue1的根本区别是虚拟DOM的引入，即VNode和Patch算法，也就是V DOM和Diff算法。这些共同构成了Vue的数据响应式。但显然的，Object.defineProperty 本身的局限性一直存在，无法直接监听数组，无法监听新增和删除的属性，为了解决这个问题，Vue3里面进行了断崖式版本更新，启用 Proxy。
 
 **让我们带着这些问题继续阅读，我相信会收获很多。**
 
@@ -83,7 +83,7 @@ export default function initData(vm) {
 }
 ```
 
-initData函数的实现的是data对象的获取，要判断data是函数还是对象，如果是函数那么直接执行，如果是对象直接赋值。以及data对象中属性的代理，即把`this._data`对象中的属性代理到`this`实例上。这个代理的工作由`proxy`完成：
+initData函数的实现的是data对象的获取，要判断data是函数还是对象，如果是函数那么直接执行，如果是对象直接赋值。以及data对象中属性的代理，即把`this._data`对象中的属性代理到`this`实例上。这个代理的工作由`proxy`函数完成：
 
 ```javascript
 // src/proxy.js
@@ -121,7 +121,7 @@ export default function observe(value) {
 
 observe函数干了下面这几件事：
 
-+ 检查value是否为值类型，如果为值类型则直接返回，终止程序。
++ 检查value是否值为类型，如果值为类型则直接返回，终止程序。
 + 检查value是否带有`__ob__`属性，如果有则直接返回该属性。
 + 两项检查都不符合，直接进行`new Observer`操作，对value进行响应式处理，并返回响应式对象。
 
