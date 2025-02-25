@@ -1,6 +1,5 @@
 # FrontDevGraph
 前端开发知识图谱
-# Renekton的技术文档
 
 1. 第一卷·前端JS手写系列  ✒️
 2. 第二卷·你不知道的JavaScript ㊙️
